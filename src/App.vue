@@ -1,15 +1,17 @@
 <template>
   <div class="app-wrapper">
     <div class="app">
+      <NavComponent />
       <router-view />
     </div>
   </div>
 </template>
 
 <script>
+import NavComponent from "@/components/NavComponent";
 export default {
   name: "app",
-  components: {},
+  components: {NavComponent},
   data() {
     return {};
   },
