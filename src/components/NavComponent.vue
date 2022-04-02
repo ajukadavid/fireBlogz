@@ -162,6 +162,7 @@ header {
   .mobile-nav-leave-to {
     transform: translateX(-250px);
   }
+
 }
 
 
