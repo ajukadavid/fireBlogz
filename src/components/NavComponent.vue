@@ -5,7 +5,7 @@
         <router-link class="header" :to="{name: 'Home'}">FireBlogs</router-link>
       </div>
       <div class="nav-links">
-        <ul>
+        <ul v-show="!mobile">
           <router-link class="link" to="#">Home</router-link>
           <router-link class="link" to="#">Blogs</router-link>
           <router-link class="link" to="#">Create Post</router-link>
@@ -13,9 +13,9 @@
         </ul>
       </div>
     </nav>
-    <menuIcon class="menu-icon"/>
+    <menuIcon @click="toggleMobileNav" class="menu-icon" v-show="mobile"/>
     <transition name="mobile-nav">
-      <ul class="mobile-nav">
+      <ul class="mobile-nav" v-show="mobileNav">
         <router-link class="link" to="#">Home</router-link>
         <router-link class="link" to="#">Blogs</router-link>
         <router-link class="link" to="#">Create Post</router-link>
@@ -27,10 +27,40 @@
 
 <script>
 import menuIcon from '../assets/Icons/bars-regular.svg'
+
 export default {
   name: "NavComponent",
   components: {
     menuIcon
+  },
+  data() {
+    return {
+      mobile: null,
+      mobileNav: null,
+      windowWidth: null
+    }
+  },
+created(){
+    window.addEventListener('resize', this.checkScreen)
+  this.checkScreen()
+},
+  methods: {
+    //function to check width of screen
+    checkScreen() {
+      this.windowWidth = window.innerWidth;
+      if (this.windowWidth <= 750) {
+        this.mobile = true
+        return;
+      }
+      this.mobile = false
+      this.mobileNav = false
+      return
+    },
+
+    //function to open and close nav menu
+    toggleMobileNav() {
+      this.mobileNav = !this.mobileNav
+    }
   }
 }
 </script>
@@ -51,6 +81,7 @@ header {
       color: #1eb8b8
     }
   }
+
   nav {
     display: flex;
     padding: 25px 0;
@@ -66,6 +97,7 @@ header {
         text-decoration: none;
       }
     }
+
     .nav-links {
       position: relative;
       display: flex;
@@ -79,12 +111,14 @@ header {
         .link {
           margin-right: 32px;
         }
+
         .link:last-child {
           margin-right: 0;
         }
       }
     }
   }
+
   .menu-icon {
     cursor: pointer;
     position: absolute;
@@ -112,11 +146,23 @@ header {
     }
   }
 
+
+  .mobile-nav-enter-active,
+  .mobile-nav-leave-active{
+    transition: all 1s ease;
+  }
+
+
+  .mobile-nav-enter {
+    transform: translateX(-250px);
+  }
+  .mobile-nav-enter-to {
+    transform: translateX(0);
+  }
+  .mobile-nav-leave-to {
+    transform: translateX(-250px);
+  }
 }
-
-
-
-
 
 
 </style>
