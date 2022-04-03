@@ -40,6 +40,7 @@ export default {
       windowWidth: null
     }
   },
+
 created(){
     window.addEventListener('resize', this.checkScreen)
   this.checkScreen()

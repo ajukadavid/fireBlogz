@@ -3,15 +3,17 @@
     <div class="app">
       <NavComponent />
       <router-view />
+      <FooterComponent />
     </div>
   </div>
 </template>
 
 <script>
 import NavComponent from "@/components/NavComponent";
+import FooterComponent from "@/components/FooterComponent";
 export default {
   name: "app",
-  components: {NavComponent},
+  components: {NavComponent, FooterComponent},
   data() {
     return {};
   },
