@@ -30,7 +30,6 @@ export default {
       }
     })
     this.checkRoute()
-
   },
   mounted() {},
   methods: {
