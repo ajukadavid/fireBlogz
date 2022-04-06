@@ -126,7 +126,13 @@ button,
   pointer-events: none !important;
   cursor: none !important;
   background-color: rgba(128, 128, 128, 0.5) !important;
-}button,
+}
+.error {
+  text-align: center;
+  font-size: 12px;
+  color: red;
+}
+button,
  .router-button {
    transition: 500ms ease all;
    cursor: pointer;
