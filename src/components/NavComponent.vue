@@ -9,9 +9,9 @@
           <router-link class="link"  :to="{name: 'Home'}">Home</router-link>
           <router-link class="link" :to="{name: 'Blogs'}">Blogs</router-link>
           <router-link class="link" to="#">Create Post</router-link>
-          <router-link class="link" :to="{name: 'Login'}">Login / Register</router-link>
+          <router-link v-if="!user" class="link" :to="{name: 'Login'}">Login / Register</router-link>
         </ul>
-        <div class="profile" ref="profile" @click="toggleProfileMenu">
+        <div v-if="user" class="profile" ref="profile" @click="toggleProfileMenu">
           <span>{{this.$store.state.profileInitials}}</span>
           <div class="profile-menu" v-show="profileMenu">
             <div class="info">
@@ -24,35 +24,45 @@
             </div>
             <div class="options">
               <div class="option">
-                <router-link to="#" class="option">
+                <router-link :to="{name: 'Profile'}" class="option">
                   <userIcon class="icon"/>
                   <p>Profile</p>
                 </router-link>
               </div>
               <div class="option">
-                <router-link to="#" class="option">
+              <router-link :to="{name: 'Admin'}" class="option">
+                <signOutIcon class="icon"/>
+                <p>Admin</p>
+              </router-link>
+            </div>
+              <div class="option" @click="signOut">
                   <adminIcon class="icon"/>
                   <p>Sign Out</p>
-                </router-link>
               </div>
-              <div class="option">
-                <router-link to="#" class="option">
-                  <signOutIcon class="icon"/>
-                  <p>Profile</p>
-                </router-link>
-              </div>
+
             </div>
           </div>
         </div>
       </div>
     </nav>
-    <menuIcon @click="toggleMobileNav" class="menu-icon" v-show="mobile"/>
+    <menuIcon @click="toggleMobileNav"
+              class="menu-icon"
+              style="
+              cursor: pointer;
+      position: absolute;
+      top: 32px;
+      right: 25px;
+      height: 25px;
+      width: auto;
+
+"
+              v-show="mobile"/>
     <transition name="mobile-nav">
       <ul class="mobile-nav" v-show="mobileNav">
         <router-link class="link"  :to="{name: 'Home'}">Home</router-link>
         <router-link class="link" :to="{name: 'Blogs'}">Blogs</router-link>
         <router-link class="link" to="#">Create Post</router-link>
-        <router-link class="link" :to="{name: 'Login'}">Login / Register</router-link>
+        <router-link v-if="!user" class="link" :to="{name: 'Login'}">Login / Register</router-link>
       </ul>
     </transition>
   </header>
@@ -63,6 +73,8 @@ import menuIcon from '../assets/Icons/bars-regular.svg'
 import userIcon from '../assets/Icons/user-alt-light.svg'
 import adminIcon from '../assets/Icons/user-crown-light.svg'
 import signOutIcon from '../assets/Icons/sign-out-alt-regular.svg'
+import firebase from "firebase/app"
+import "firebase/auth"
 
 export default {
   name: "NavComponent",
@@ -102,8 +114,20 @@ created(){
     toggleMobileNav() {
       this.mobileNav = !this.mobileNav
     },
-    toggleProfileMenu(){
-      this.profileMenu = !this.profileMenu
+    toggleProfileMenu(e){
+      if(e.target === this.$refs.profile) {
+        this.profileMenu = !this.profileMenu
+      }
+      },
+
+    signOut() {
+      firebase.auth().signOut();
+      window.location.reload()
+    }
+  },
+  computed: {
+    user(){
+      return this.$store.state.user
     }
   }
 }
@@ -173,6 +197,9 @@ header {
         color: white;
         background-color: #303030;
 
+        span {
+          pointer-events: none;
+        }
         .profile-menu {
           position: absolute;
           top: 60px;
@@ -245,14 +272,7 @@ header {
       }
     }
 
-    .menu-icon {
-      cursor: pointer;
-      position: absolute;
-      top: 32px;
-      right: 25px;
-      height: 25px;
-      width: auto;
-    }
+
 
     .mobile-nav {
       padding: 20px;
