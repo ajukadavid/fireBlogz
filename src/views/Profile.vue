@@ -43,12 +43,45 @@ export default {
   data(){
     return {
       modalMessage: "Changes were saved",
-      modalActive: true,
+      modalActive: null,
     }
   },
   methods: {
     closeModal(){
       this.modalActive = !this.modalActive
+    },
+    updateProfile(){
+      this.$store.dispatch("updateUserSettings");
+      this.modalActive = !this.modalActive
+    }
+  },
+  computed: {
+    firstName: {
+      get(){
+        return this.$store.state.profileFirstName
+      },
+      set(payload){
+        this.$store.commit("changeFirstName", payload)
+      }
+    },
+    lastName: {
+      get(){
+        return this.$store.state.profileLastName
+      },
+      set(payload){
+        this.$store.commit("changeLastName", payload)
+      }
+    },
+    username: {
+      get(){
+        return this.$store.state.profileUsername
+      },
+      set(payload){
+        this.$store.commit("changeUsername", payload)
+      }
+    },
+    email(){
+      return this.$store.state.profileEmail
     }
   }
 }
